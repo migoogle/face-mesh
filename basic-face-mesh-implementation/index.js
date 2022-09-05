@@ -25,7 +25,7 @@ async function setupCanvas() {
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
 
-    ctx.fillStyle = "green";
+    ctx.fillStyle = "red";
 }
 
 async function loadFaceLandmarkDetectionModel() {
