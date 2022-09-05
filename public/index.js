@@ -1,3 +1,5 @@
+import '@tensorflow-models/face-landmarks-detection'
+
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const eyesBlinkedText = document.getElementById("eyesBlinkedCount");
@@ -8,6 +10,13 @@ const thresholdText = document.getElementById("threshold");
 let ctx;
 let videoWidth, videoHeight;
 let beep_timer = 0;
+
+const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+const detectorConfig = {
+  runtime: 'mediapipe', // or 'tfjs'
+  solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+}
+
 
 let snd = new Audio("alarm_clock.ogg");
 
@@ -32,13 +41,11 @@ function setupCanvas() {
 }
 
 async function loadFaceLandmarkDetectionModel() {
-    return faceLandmarksDetection
-        .load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-            { maxFaces: 1 });
+    return faceLandmarksDetection.createDetector(model, detectorConfig);
 }
 
 async function renderPrediction() {
-    const predictions = await model.estimateFaces({
+    const predictions = await detector.estimateFaces({
         input: video
     });
 
@@ -245,7 +252,7 @@ async function main() {
     setupCanvas();
 
     //Load the model
-    model = await loadFaceLandmarkDetectionModel();
+    detector = await loadFaceLandmarkDetectionModel();
 
     //Render Face Mesh Prediction
     renderPrediction();
